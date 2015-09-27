@@ -130,7 +130,7 @@ function set2(GBA){
 function setRequest(GBA){
 
     trace('ok');
-    _BASE_URL = "http://192.168.1.5/wsforfun/"
+    _BASE_URL = "http://git-gamecon-shirofuji-1.c9.io/wsforfun/"
 
     GBA.addLoop = function(fnc){
             GBA.enterFrame.push(fnc);
@@ -150,7 +150,7 @@ function setRequest(GBA){
           type: "POST",
           url: _BASE_URL + 'send.php',
           data: {
-            gb : JSON.stringify({"test_data":true})
+            op : JSON.stringify({"test_data":true})
           },
           dataType: 'text',
           success: function(response) {

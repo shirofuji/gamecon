@@ -1,5 +1,4 @@
 function set5(game,GBA){
-
         GBA.sample = function(GBA){}
 
         GBA.sample.prototype = {
@@ -129,13 +128,15 @@ function set5(game,GBA){
         player2.scale.setTo(0.5)
 
         var tst = 0
-
+        cur_pos1 = 0 
+  
         move_player = function _move_player(who){
+            console.log(who, 'are you?');
             cur_pos1 += 1
             tst+=1
             TweenMax.to(who,0.5,{x:flr_tile[path[cur_pos1]].x,y:flr_tile[path[cur_pos1]].y,onComplete:function(){
                 if(tst<5){
-                    TweenMax.delayedCall(1,move_player,[player1])
+                    TweenMax.delayedCall(1,move_player,[who])
                 }else{
                     tst=0
                     console.log('test');

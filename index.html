@@ -65,8 +65,22 @@
 		</div>
 
 				-->
-				
 		<script src="assets/html5/com/jquery-1.11.2.min.js"></script>
+		<script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+		<script>
+		$(function() {
+		    ab.connect('ws://git-gamecon-shirofuji-1.c9.io:8081/game',function(session){
+                    session.subscribe('room',function(topic,wsmessage){
+                        var decoded = JSON.parse(wsmessage)
+                        if(decoded.game==true && decoded.turn=='user2'){
+                            $('#rolluser2').show()
+                            $('#enduser2').show()
+                        }
+                        $('#user2').append(wsmessage);
+                    });
+                });
+		})
+		</script>
 		<script src="assets/html5/com/phaser.min.js"></script>
 		
 		<script src="assets/html5/com/filter/BlurX.js"></script>
