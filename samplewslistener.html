@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sample</title>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+        <script src='http://autobahn.s3.amazonaws.com/js/autobahn.min.js'></script>
+        <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+        <script>
+            var gamestarted=false;
+            $(document).ready(function(){
+                // 1 abconnect per browser
+                //user 1 session
+                ab.connect('ws://gamecon-shirofuji.c9.io:8081/game',
+                    function(session){
+                        session.subscribe('room',function(topic,wsmessage){
+                            var decoded=JSON.parse(wsmessage);
+                            if(decoded.game == true && decoded.turn=='user1'){
+                                $('#rolluser1').show()
+                                $('#enduser1').show()
+                            }
+                            $('#user1').append(wsmessage);
+                        });
+                    $.ajax({
+                        url:'http://gamecon-shirofuji.c9.io/wsforfun/send.php',
+                        type:'post',
+                        data:{'op':'join','user':'user1','data':session.sessionid()},
+                        error:function(x){
+                            alert(x.responseText);
+                        }
+                    });
+                    $('#user1').append('<p style="background:green">Connected</p>')
+                });
+                // user2 session
+                ab.connect('ws://gamecon-shirofuji.c9.io:8081/game',function(session){
+                    session.subscribe('room',function(topic,wsmessage){
+                        var decoded = JSON.parse(wsmessage)
+                        if(decoded.game==true && decoded.turn=='user2'){
+                            $('#rolluser2').show()
+                            $('#enduser2').show()
+                        }
+                        $('#user2').append(wsmessage);
+                    });
+                    $.ajax({
+                        url:'http://gamecon-shirofuji.c9.io/wsforfun/send.php',
+                        type:'post',
+                        data:{'op':'join','user':'user2','data':session.sessionid()},
+                        error:function(x){
+                            alert(x.responseText)
+                        }
+                    });
+                    $('#user2').append('<p style="background:green;">Connected</p>');
+                });
+                //user 3 session
+                ab.connect('ws://gamecon-shirofuji.c9.io:8081/game',function(session){
+                    session.subscribe('room',function(topic,wsmessage){
+                        var decoded = JSON.parse(wsmessage)
+                        if(decoded.game==true && decoded.turn=='user3'){
+                            $('#rolluser3').show()
+                            $('#enduser3').show()
+                        }
+                        $('#user3').append(wsmessage)
+                    })
+                    $.ajax({
+                        url:'http://gamecon-shirofuji.c9.io/wsforfun/send.php',
+                        type:'post',
+                        data:{'op':'join','user':'user3','data':session.sessionid()},
+                        error:function(x){ alert(x.responseText) }
+                    })
+                    $('#user3').append('<p style="background:green">Connected</p>')
+                })
+                //user 4 session
+                ab.connect('ws://gamecon-shirofuji.c9.io:8081/game',function(session){
+                    session.subscribe('room',function(topic,wsmessage){
+                        var decoded = JSON.parse(wsmessage);
+                        if(decoded.game == true && decoded.turn == 'user4'){
+                            $('#rolluser4').show()
+                            $('#enduser4').show()
+                        }
+                        $('#user4').append(wsmessage)
+                    })
+                    $.ajax({
+                        url:'http://gamecon-shirofuji.c9.io/wsforfun/send.php',
+                        type:'post',
+                        data:{op:'join',user:'user4',data:session.sessionid()},
+                        error:function(x){
+                            alert(x.responseText)
+                        }
+                    });
+                    $('#user4').append('<p style="background:green">Connected</p>')
+                });
+                $('button').hide()
+            })
+            function roll(username){
+                $.ajax({
+                    url:'http://gamecon-shirofuji.c9.io/wsforfun/send.php',
+                    type:'post',
+                    data:{'op':'dice','user':username},
+                    error:function(x){ alert(x.responseText) }
+                })
+                $("#roll"+username).hide();
+            }
+            function end(username){
+                $.ajax({
+                    url:'http://gamecon-shirofuji.c9.io/wsforfun/send.php',
+                    type:'post',
+                    data:{'op':'endturn','user':username},
+                    error:function(x){ alert(x.responseText) }
+                })
+                $('button').hide()
+            }
+        </script>
+    </head>
+    <body>
+        <button id='rolluser1' onclick='roll("user1")'>Roll user1</button>
+        <button id='rolluser2' onclick='roll("user2")'>Roll user2</button>
+        <button id='rolluser3' onclick='roll("user3")'>Roll user3</button>
+        <button id='rolluser4' onclick='roll("user4")'>Roll user4</button>
+        
+        <button id='enduser1' onclick='end("user1")'>EndTurn user1</button>
+        <button id='enduser2' onclick='end("user2")'>EndTurn user2</button>
+        <button id='enduser3' onclick='end("user3")'>EndTurn user3</button>
+        <button id='enduser4' onclick='end("user4")'>EndTurn user4</button>
+        <div class='row'>
+            <div id='user1' class='panel col-sm-3'>
+                
+            </div>
+            <div id='user2' class='panel col-sm-3'>
+                
+            </div>
+            <div id='user3' class='panel col-sm-3'>
+                
+            </div>
+            <div id='user4' class='panel col-sm-3'>
+                
+            </div>
+        </div>
+    </body>
